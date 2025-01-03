@@ -1,0 +1,75 @@
+#ifndef OYUN_HPP
+#define OYUN_HPP
+
+#include <SFML/Graphics.hpp>
+#include <iostream>
+#include <vector>
+#include <cstdlib>
+#include <ctime>
+#include <memory>
+
+// Hareket yönü
+enum class Yon {
+    SOL,
+    SAG,
+    YUKARI,
+    ASAGI
+};
+
+// Temel oyun objesi sınıfı
+class GameObject {
+public:
+    virtual void hareket(Yon yon) = 0;
+    virtual sf::Shape& getShape() = 0;
+    virtual const sf::Shape& getShape() const = 0;
+    virtual sf::Vector2f getKonum() const = 0;
+    virtual ~GameObject() = default;
+};
+
+// Top sınıfı
+class Top : public GameObject {
+public:
+    Top(float yaricap, sf::Color renk);
+
+    void hareket(Yon yon) override;
+    sf::CircleShape& getShape() override;
+    const sf::CircleShape& getShape() const override;
+    sf::Vector2f getKonum() const override;
+
+private:
+    sf::CircleShape top;
+    sf::Vector2f konum;
+};
+
+// Engel sınıfı
+class Engel : public GameObject {
+public:
+    Engel(float genislik, float yukseklik, sf::Color renk);
+
+    void hareket(Yon yon) override;
+    sf::RectangleShape& getShape() override;
+    const sf::RectangleShape& getShape() const override;
+    sf::Vector2f getKonum() const override;
+
+private:
+    sf::RectangleShape engel;
+};
+
+// Yıldız sınıfı
+class Yildiz : public GameObject {
+public:
+    Yildiz(float yaricap, sf::Color renk);
+
+    void hareket(Yon yon) override;
+    sf::CircleShape& getShape() override;
+    const sf::CircleShape& getShape() const override;
+    sf::Vector2f getKonum() const override;
+
+private:
+    sf::CircleShape yildiz;
+};
+
+// Çarpışma kontrol fonksiyonu
+bool carpismaKontrol(const GameObject& obj1, const GameObject& obj2);
+
+#endif // OYUN_HPP
